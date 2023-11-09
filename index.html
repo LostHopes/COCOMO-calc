@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COCOMO калькулятор</title>
-    <script src="/js/index.js"></script>
+    <title>Main page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -14,22 +13,15 @@
 </head>
 
 <body>
-    <header>
-        <nav>
-            <ul class="d-flex justify-content-around">
-                <li><a class="text-decoration-none" href="#">Basic calculator</a></li>
-                <li><a class="text-decoration-none" href="#">COCOMO 2</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="d-flex justify-content-center flex-column align-items-center">
-        <input type="text" placeholder="Введіть значення тут: ">
-        <input type="text" placeholder="Введіть значення тут: ">
-        <input type="button" value="Обчислити" class="btn btn-dark text-white rounded-4">
+    <div class="dropdown text-center m-sm-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Виберіть обчислення
+        </button>
+        <ul class="dropdown-menu" id="calcMethod">
+            <li><a class="dropdown-item" href="pages/cocomo.html" target="_blank">COCOMO</a></li>
+            <li><a class="dropdown-item" href="pages/cocomo2.html" target="_blank">COCOMO 2</a></li>
+        </ul>
     </div>
-
-    <footer></footer>
 </body>
 
 </html>
