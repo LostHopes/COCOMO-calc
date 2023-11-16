@@ -1,11 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COCOMO 2</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>COCOMO 2</title>
 </head>
+
 <body>
-    
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <label for="size">Enter the size of the software product in KLOC:</label>
+        <input type="number" id="size" name="size" min="1" required>
+
+        <label for="sf">Select the Scale Factor for the Early Design Model:</label>
+        <select id="sf" name="sf">
+          <option value="verylow">Very Low</option>
+          <option value="low">Low</option>
+          <option value="nominal" selected>Nominal</option>
+          <option value="high">High</option>
+          <option value="veryhigh">Very High</option>
+        </select>
+
+        <label for="em">Select the Scale Factor for the Post-Architecture Model:</label>
+        <select id="em" name="em">
+          <option value="verylow">Very Low</option>
+          <option value="low">Low</option>
+          <option value="nominal">Nominal</option>
+          <option value="high" selected>High</option>
+          <option value="veryhigh">Very High</option>
+        </select>
+
+        <button id="calculate1">Calculate</button>
+
+        <p>Effort: <span id="effort1"></span></p>
+      </div>
+      <div class="col">
+        <div class="py-3">
+          <label for="loc">Enter the estimated size of the software product in lines of code:</label>
+          <input type="number" id="loc" name="loc" min="1" required>
+        </div>
+        <div class="py-3">
+          <label for="salary">Enter the average salary rate per year:</label>
+          <input type="number" id="salary" name="salary" min="1" required>
+        </div>
+        <div class="py-3">
+          <label for="team">Enter the number of developers in the team:</label>
+          <input type="number" id="team" name="team" min="1" required>
+        </div>
+        <div class="py-3">
+          <button id="calculate2">Calculate</button>
+        </div>
+        <p>Effort: <span id="effort2"></span></p>
+        <p>Schedule: <span id="schedule"></span></p>
+        <p>Cost: <span id="cost"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $('#calculate1').click(function () {
+        var size = $('#size').val();
+        var sf = $('#sf').val();
+        var em = $('#em').val();
+        var a, b;
+
+        switch (sf) {
+          case 'verylow':
+            a = 2.12;
+            break;
+          case 'low':
+            a = 1.62;
+            break;
+          case 'nominal':
+            a = 1.0;
+            break;
+          case 'high':
+            a = 0.83;
+            break;
+          case 'veryhigh':
+            a = 0.63;
+            break;
+        }
+
+        switch (em) {
+          case 'verylow':
+            b = 1.23;
+            break;
+          case 'low':
+            b = 1.10;
+            break;
+          case 'nominal':
+            b = 1.0;
+            break;
+          case 'high':
+            b = 0.91;
+            break;
+          case 'veryhigh':
+            b = 0.82;
+            break;
+        }
+
+        var eaf = 1.0; // TODO: calculate the Effort Adjustment Factor based on the values of the cost drivers
+        var effort = a * Math.pow(size, b) * eaf;
+        $('#effort1').text(effort.toFixed(2) + ' person-months');
+      });
+
+      $('#calculate2').click(function () {
+        var loc = $('#loc').val();
+        var salary = $('#salary').val();
+        var team = $('#team').val();
+        var a = 2.94;
+        var b = 1.05;
+        var c = 3.67;
+        var d = 0.98;
+        var effort = a * Math.pow(loc, b) / team;
+        var schedule = c * Math.pow(effort, d);
+        var cost = effort * salary;
+        $('#effort2').text(effort.toFixed(2) + ' person-months');
+        $('#schedule').text(schedule.toFixed(2) + ' months');
+        $('#cost').text('$' + cost.toFixed(2));
+      });
+    });
+  </script>
 </body>
+
 </html>

@@ -17,9 +17,46 @@
     <div class="d-flex flex-column align-items-center p-lg-3">
         <input type="number" placeholder="Введіть значення завдання тут: " class="p-2 m-2 border-3" id="tasks">
         <input type="number" placeholder="Введіть значення  тут: " class="p-2 m-2 border-3" id="resources">
-        <textarea type="text" cols="20" rows="10" readonly placeholder="Результат" class="p-3 m-2 border-3" id="result"></textarea>
+        <textarea type="text" cols="20" rows="10" readonly placeholder="Результат" class="p-3 m-2 border-3"
+            id="result"></textarea>
         <input type="button" value="Обчислити" class="btn btn-dark text-white rounded-4" id="calc">
     </div>
+    <label for="kloc">Enter the size of the software product in KLOC:</label>
+    <input type="number" id="kloc" name="kloc" min="1" required>
+
+    <fieldset>
+        <legend>Сцераній 1</legend>
+        <p>значення множників (драйверів) витрат CPLX, STOR, DOCU, РСАР
+            змінюються до дуже високих, всі інші значення номінальні.</p>
+        <button id="scenario1">Calculate</button>
+        <p>Effort: <span id="effort1"></span></p>
+        <p>Development Time: <span id="time1"></span></p>
+        <p>Average Staff Size: <span id="staff1"></span></p>
+    </fieldset>
+
+    <fieldset>
+        <legend>Сценарій 2</legend>
+        <p>Для другого сценарію, де значення витрат є:</p>
+        <ul>
+            <li>RELY – низький</li>
+            <li>DATA – дуже низький</li>
+            <li>CPLX – низький</li>
+            <li>TIME – дуже низький</li>
+            <li>STOR – високий</li>
+            <li>VIRT (PVOL) – дуже високий</li>
+            <li>TURN (STIME) – високий</li>
+            <li>ACAP (ASAP) – високий</li>
+            <li>AEXP – дуже низький</li>
+            <li>PCAP (PERS) – дуже низький</li>
+            <li>VEXP (PEXP) – високий</li>
+            <li>LEXP (LTEX) –високий</li>
+            <li>MODP (FCIL), TOOL, SCED – високий</li>
+        </ul>
+        <button id="scenario2">Calculate</button>
+        <p>Effort: <span id="effort2"></span></p>
+        <p>Development Time: <span id="time2"></span></p>
+        <p>Average Staff Size: <span id="staff2"></span></p>
+    </fieldset>
     <script>
         $(document).ready(function () {
             $('#calc').click(function () {
@@ -34,11 +71,56 @@
                     var ss = pm / tm;
                     var r = ss / tm;
 
-                    result.val('Effort (PM): ' + pm.toFixed(2) + ' | Duration (TM): ' + tm.toFixed(2) + ' weeks | Average Number of Personnel (SS): ' + ss.toFixed(2) + ' | Productivity Rate (R): ' + r.toFixed(2) + ' KLOC/month');
+                    result.val('Effort (PM): ' + pm.toFixed(2) + '\nDuration (TM): ' + tm.toFixed(2) + ' weeks' + "\nAverage Number of Personnel (SS): " + ss.toFixed(2) + '\nProductivity Rate (R): ' + r.toFixed(2) + 'KLOC/month');
                 } else {
                     result.val('Please enter values for tasks and resources.');
                 }
             });
+            $(document).ready(function () {
+                $('#scenario1').click(function () {
+                    var kloc = $('#kloc').val();
+                    var a = 2.4;
+                    var b = 1.05;
+                    var c = 2.5;
+                    var d = 0.38;
+                    var cplx = 1.30;
+                    var stor = 1.21;
+                    var docu = 1.23;
+                    var rsar = 0.70;
+                    var effort = a * Math.pow(kloc, b) * cplx * stor * docu * rsar;
+                    var time = c * Math.pow(effort, d);
+                    var staff = effort / time;
+                    $('#effort1').text(effort.toFixed(2) + ' person-months');
+                    $('#time1').text(time.toFixed(2) + ' months');
+                    $('#staff1').text(staff.toFixed(2) + ' persons');
+                });
+
+                $('#scenario2').click(function () {
+                    var kloc = $('#kloc').val();
+                    var rely = 0.88;
+                    var cplx = 0.85;
+                    var stor = 1.06;
+                    var virt = 1.30;
+                    var turn = 1.07;
+                    var acap = 0.86;
+                    var aexp = 1.29;
+                    var pcap = 1.42;
+                    var vexp = 0.90;
+                    var lexp = 0.95;
+                    var modp = 0.91;
+                    var tool = 0.91;
+                    var sced = 1.04;
+                    var effort = 2.94 * Math.pow(kloc, 1.1) *
+                        rely * cplx * stor * virt * turn *
+                        acap * aexp * pcap * vexp * lexp * modp * tool * sced;
+                    var time = 3.67 * Math.pow(effort, 0.28);
+                    var staff = effort / time;
+                    $('#effort2').text(effort.toFixed(2) + ' person-months');
+                    $('#time2').text(time.toFixed(2) + ' months');
+                    $('#staff2').text(staff.toFixed(2) + ' persons');
+                });
+            });
+
         });
     </script>
 </body>
